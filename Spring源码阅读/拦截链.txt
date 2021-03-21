@@ -1,0 +1,34 @@
+chain
+
+    ExposeInvocationInterceptor              系统默认的拦截器
+	MethodBeforeAdviceInterceptor            MathLog::beforeStart          @Before
+	AspectJAfterAdvice                       MathLog::afterComplete        @After
+	AfterReturningAdviceInterceptor          MathLog::afterReturning       @AfterReturning
+	AspecJAfterThrowingAdvice                MathLog::afterThrowing        @AfterThrowing
+	
+	
+	ExposeInvocationInterceptor  -> process()
+	
+	  -> MethodBeforeAdviceInterceptor -> this.advice.before() -> process()
+	  
+	    -> AspectJAfterAdvice  -> process
+		  
+		  -> AfterReturningAdviceInterceptor -> process
+		    
+			-> AspecJAfterThrowingAdvice -> process->指行目标方法  | invokeAdviceMethod
+			
+			-> this.advice.afterReturning()
+		  
+		  -> invokeAdviceMethod()
+		  
+		  
+		  
+
+@Before -> 目标方法执行 -> @AfterThrowing -> @AfterReturning -> @After
+
+
+正常执行：
+    @Before -> 目标方法执行 -> @AfterReturning -> @After
+
+异常执行：
+    @Before -> 目标方法执行 -> @AfterThrowing -> @After
